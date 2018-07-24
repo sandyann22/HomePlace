@@ -5,10 +5,16 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     message="l'email que vous avez saisi, est déjà utilisé"
+ *     )
  */
 class User implements UserInterface
 {
@@ -16,6 +22,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
      */
     private $id;
 
@@ -46,8 +53,14 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @assert\Length(min="8", minMessage="Votre mot de passe doit faire au minimum 8 caractères")
      */
     private $password;
+    /**
+     * @assert\EqualTo(propertyPath="password", message="Votre mot de passe n'est pas identique à la confirmation")
+     */
+
+    public  $confirm_password;
 
     /**
      * @ORM\Column(type="json_array")
@@ -143,7 +156,7 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return $this->roles;
+        return array('ROLE_USER');
     }
 
     public function setRoles($roles): self
@@ -152,6 +165,17 @@ class User implements UserInterface
 
         return $this;
     }
+    public function addRole($role) {
+        $this->roles[] = $role;
+   }
+
+    public function removeRole($role) {
+        $index = array_search($role, $this->roles, true);
+        if ($index !== false) {
+            array_splice($this->roles, $index, 1);
+        }
+    }
+
 
     /**
      * Returns the salt that was originally used to encode the password.

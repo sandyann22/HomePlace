@@ -3,7 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AnnonceRepository")
  */
@@ -32,7 +33,10 @@ class Annonce
     private $createdAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="S'il vous plait, merci de télécharger une image .")
+     * @Assert\File(mimeTypes={ "image/*" })
      */
     private $image;
 
@@ -55,6 +59,7 @@ class Annonce
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="annonces")
      */
     private $user;
+
 
     public function getId()
     {
@@ -97,12 +102,12 @@ class Annonce
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getImage()
     {
         return $this->image;
     }
 
-    public function setImage(string $image): self
+    public function setImage($image)
     {
         $this->image = $image;
 
