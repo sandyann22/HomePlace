@@ -2,21 +2,25 @@
 
 
 {% block body %}
-<section class="articles">
-    {% for annonce in annonces %}
-    <article>
-        <h2> {{ annonce.titre }}</h2>
-        {#<div class="metadata">Crée le : {{ annonce.createdAt | date('d/m/Y') }} à  {{ annonce.createdAt | date('H:i') }}</div>#}
-        <img src="{{ annonce.image }}" alt="{{ annonce.titre }}">
+    <div>
+        <section class="articles">
+            {% for annonce in annonces %}
+            <article>
+                <h2> {{ annonce.titre }}</h2>
+                {#<div class="metadata">Crée le : {{ annonce.createdAt | date('d/m/Y') }} à  {{ annonce.createdAt | date('H:i') }}</div>#}
+                <img src="\uploads\images\{{ annonce.image }}" alt="{{ annonce.titre }}">
 
-        <div class="content" >{{ annonce.description }}</div>
-        <div class="content" >{{ annonce.region }}</div>
-        <div class="content" >{{ annonce.categorie }}</div>
-        <div class="content" >{{ annonce.autre }}</div>
-    </article>
+                <div class="content">{{ annonce.description }}</div>
+                <div class="content">{{ annonce.region }}</div>
+                <div class="content">{{ annonce.categorie }}</div>
+                <div class="content">{{ annonce.autre }}</div>
+                <a href="{{path('annonceshow',{"id":annonce.id} ) }}" class="btn btn-primary">Voir l'annonce</a>
+            </article>
 
 
-</section>
-{% endfor %}
+        </section>
+
+        {% endfor %}
+    </div>
 
 {% endblock %}

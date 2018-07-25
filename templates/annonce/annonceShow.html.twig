@@ -1,27 +1,27 @@
 {% extends'base.html.twig' %}
+
 {% block body %}
-    <article>
-        <h2> Titre de l'annonce</h2>
-        <div class="metadata">Écrit le 18/07/2018 à 15:19 dans la catégorie Maisons</div>
+<article>
 
-        <div class="content">
-            <img src="http://placehold.it/350x150" alt="Maison à la Rochelle">
-            <p>Cachée sous les pins, vous serez accueilli dans une maison de pécheur authentique.
-                Décorée avec soin, elle offre un environnement calme et naturel.
-                A proximité des commerces et à 7 kms du bord de l'océan, notre nid douillé sera vous
-                séduire</p>
-            <p>Il est disponible du 2 au 15 Août 2018 et permet de recevoir jusqu'à 6 personnes</p>
-            <hr>
-            <p>Pour bénificier de l'usage de notre bien, vous aurez deux missions à accomplir en
-                plus de veiller au respect de notre bien.
-                Il vous faudra accepter les calins accueillant de Brooklyn, notre golden retriever aux yeux
-                doux. Il ne réclamera en échange, qu'une gamelle approvisionnée, des jeux et des carresses.
-                Il vous faudra également entretenir le jardin à tondre au moins une fois, mais vous pourrez
-                cueillir quelques légumes du potager</p>
-            <p>La maison comporte 2 chambres et 2 salles de bains. Pour tout renseignement me contacter
-                au : 06.06.06.06.06 Madame Dupont de la Rochelle.
-            </p>
-        </div>
-    </article>
+    <h2> {{ annonce.titre }}</h2>
+    {#<div class="metadata">Crée le : {{ annonce.createdAt | date('d/m/Y') }} à  {{ annonce.createdAt | date('H:i') }}</div>#}
+    <img src="\uploads\images\{{ annonce.image }}" alt="{{ annonce.titre }}">
 
+    <div class="content">{{ annonce.description }}</div>
+    <div class="content">{{ annonce.region }}</div>
+    <div class="content">{{ annonce.categorie }}</div>
+    <div class="content">{{ annonce.autre }}</div>
+
+    <hr>
+    <p>Pour bénificier de l'usage de notre bien, vous aurez deux missions à accomplir en
+        plus de veiller au respect de notre bien.
+        Il vous faudra accepter les calins accueillant de Brooklyn, notre golden retriever aux yeux
+        doux. Il ne réclamera en échange, qu'une gamelle approvisionnée, des jeux et des carresses.
+        Il vous faudra également entretenir le jardin à tondre au moins une fois, mais vous pourrez
+        cueillir quelques légumes du potager</p>
+    <p>La maison comporte 2 chambres et 2 salles de bains. Pour tout renseignement me contacter
+        au : 06.06.06.06.06 Madame Dupont de la Rochelle.
+    </p>
+
+</article>
 {% endblock %}

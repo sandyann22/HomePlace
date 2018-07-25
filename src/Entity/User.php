@@ -197,7 +197,7 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        // TODO: Implement eraseCredentials() method.
+        $this->password=null;
     }
 
     /**
@@ -230,4 +230,5 @@ class User implements UserInterface
 
         return $this;
     }
+
 }

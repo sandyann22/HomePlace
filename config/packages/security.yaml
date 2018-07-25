@@ -5,7 +5,14 @@ security:
         algorithm: bcrypt
 
     providers:
-        in_memory: { memory: ~ }
+        in_memory:                                  #fournisseur d'utilisateurs pour ce pare-feu
+            memory:
+                users:
+                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+
+
+
         in_database:
           entity:
             class: App\Entity\User
@@ -15,13 +22,22 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            anonymous: true
+        main:             #nom du pare-feu(modifiable)
+            anonymous: true #accepte les utilisateurs anonymes
+
+        pattern:    ^/   # masque d'url permettant de proteger avec le pare-feu toutes les url commencant par /
+        http_basic: ~    # use http basic for login
 
             provider: in_database
             form_login:
               login_path: security_login
               check_path: security_login
+              default_target_path: home
+
+            logout:
+                path: /logout
+                target: /login
+                invalidate_session: true
 
 
 
@@ -38,3 +54,11 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/public, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/connexion, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_USER }
+
+    role_hierarchy:
+            ROLE_ADMIN:       ROLE_USER
+            ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]

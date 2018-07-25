@@ -36,15 +36,7 @@ class HomeController extends Controller
         return $this->render('home/about.html.twig');
     }
 
-    /**
-     * @Route("/annonceup", name="annonceup")
-     */
-    public function annonceup()
-    {
-
-        return $this->render('home/annonceUpToDate.html.twig');
-    }
-
+//
 
 }
 

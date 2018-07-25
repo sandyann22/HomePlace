@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Annonce;
 use App\Form\AnnonceFormType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,9 +16,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class AnnonceController extends Controller
 {
     /**
-     * @Route("/annonceadd", name="annonceAdd")
+     * @Route("/annonceadd", name="annonceadd")
      */
-    public function add(Request $request, EntityManagerInterface $em)
+    public function add(Request $request, EntityManagerInterface $em, FileUploader $fileUploader)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -25,6 +26,10 @@ class AnnonceController extends Controller
         $form = $this->createForm(AnnonceFormType::class, $annonce)->add('Ajouter', SubmitType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $annonce->getImage();
+            $fileName = $fileUploader->upload($file);
+            $annonce->setImage($fileName);
 
             $em->persist($annonce);
             $em->flush();
@@ -39,17 +44,22 @@ class AnnonceController extends Controller
     }
 
     /**
-     * @Route("/annonceshow", name="annonceShow")
+     * @Route("/annonceshow/{id}", name="annonceshow")
+     *
      */
 
-    public function show()
+    public function show(Annonce $annonce)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        return $this->render('annonce/annonceShow.html.twig', [
 
-        return $this->render('annonce/annonceShow.html.twig');
+            'annonce' => $annonce
+        ]);
+
     }
 
     /**
-     * @Route("/annonceup",name="annonceUp")
+     * @Route("/annonceup",name="annonceup")
      */
     public function annonceUp()
     {
@@ -57,12 +67,40 @@ class AnnonceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $annonces = $em->getRepository(Annonce::class)->findAll();
 
-        dump($annonces);
         return $this->render('home/annonceUpToDate.html.twig', [
 
             'annonces' => $annonces
         ]);
     }
+//METTRE A JOUR UNE ANNONCE
+    /**
+     * @Route('/annonce/update/{annonce}')
+     */
+    public function update_ann(Annonce $annonce)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $annonces = $em->getRepository(Annonce::class)->findAll();
+        return ["annonces" => $annonces];
+
+    }
+
+    //SUPPRIMER UNE ANNONCE
+
+    /**
+     * @Route('/annonce/delete/{annonce}')
+     */
+    public function delete_ann(Annonce $annonce)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $annonces = $em->getRepository(Annonce::class)->findAll();
+        return ["annonces" => $annonces];
+    }
+
+
+
+
+
 
     private function generateUniqueFileName()
     {
