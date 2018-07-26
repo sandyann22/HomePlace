@@ -18,7 +18,6 @@ class AnnonceFormType extends AbstractType
             ->add('titre', TextType::class)
             ->add('description', TextType::class)
             ->add('createdAt')
-            ->add("image", fileType::class,  array('label' => 'Image (JPEG file)'))
             ->add('region')
             ->add('categorie')
             ->add('autre')

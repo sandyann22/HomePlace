@@ -2,9 +2,10 @@
 
 
 {% block body %}
-    <div>
+
+    {% for annonce in annonces %}
+
         <section class="articles">
-            {% for annonce in annonces %}
             <article>
                 <h2> {{ annonce.titre }}</h2>
                 {#<div class="metadata">Crée le : {{ annonce.createdAt | date('d/m/Y') }} à  {{ annonce.createdAt | date('H:i') }}</div>#}
@@ -18,9 +19,14 @@
             </article>
 
 
+
+        <h4>Pour modifier ou supprimer une annonce,cliquer sur le bouton correspondant</h4>
+
+            <a onclick="return confirm('Cette action est définitive');" href="{{ path("updateann", {"annonce":annonce.id}) }}">Modifier</a>
+            <a onclick="return confirm('Cette action est définitive');" href="{{ path("annoncedelete", {"annonce":annonce.id}) }}">Supprimer</a>
+
         </section>
 
-        {% endfor %}
-    </div>
 
+            {% endfor %}
 {% endblock %}

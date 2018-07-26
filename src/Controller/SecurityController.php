@@ -15,7 +15,7 @@ class SecurityController extends Controller
     /**
      * @Route("/inscription", name="security_registration")
      */
-   public function registration(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder)
+   public function registration(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder, \Swift_Mailer $mailer)
    {
        $user = new User();
 
@@ -29,7 +29,11 @@ class SecurityController extends Controller
            $user->setPassword($hash);                                         //REINITIALISE AVEC LE CRYPTAGE
            $manager->persist($user);                                          //INSCRIT LE NEW USER DANS LA BDD
            $manager->flush();                                                 //ENREGISTRE LE
+
+
+           $mailer -> send ( $message );
            return $this->redirectToRoute('security_login');
+
        }
        return $this->render('security/registration.html.twig', ['form' => $form->createView()
        ]);

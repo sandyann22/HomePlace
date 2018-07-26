@@ -7,6 +7,7 @@ use App\Entity\Annonce;
 use App\Form\AnnonceFormType;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,7 +24,12 @@ class AnnonceController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $annonce = new Annonce();
-        $form = $this->createForm(AnnonceFormType::class, $annonce)->add('Ajouter', SubmitType::class);
+        $form = $this->createForm(AnnonceFormType::class, $annonce)
+            ->add("image", fileType::class,  array(
+                'label' => 'Image (JPEG file)',
+                'data_class' => null
+            ))
+            ->add('Ajouter', SubmitType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -34,12 +40,18 @@ class AnnonceController extends Controller
             $em->persist($annonce);
             $em->flush();
 
-            return $this->redirectToRoute("annonceUp");
+
+            return $this->redirectToRoute("annonceup");
 
         }
 
         return $this->render('annonce/annonceAdd.html.twig',
-            ["form" => $form->createView()]);
+            [
+                "form" => $form->createView(),
+             'annonces' => $annonce
+
+            ]);
+
 
     }
 
@@ -57,7 +69,7 @@ class AnnonceController extends Controller
         ]);
 
     }
-
+    //MODIFIER UNE ANNONCE
     /**
      * @Route("/annonceup",name="annonceup")
      */
@@ -65,41 +77,55 @@ class AnnonceController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $annonces = $em->getRepository(Annonce::class)->findAll();
+        $annonce = $em->getRepository(Annonce::class)->findAll();
 
         return $this->render('home/annonceUpToDate.html.twig', [
 
-            'annonces' => $annonces
+            'annonces' => $annonce
         ]);
     }
-//METTRE A JOUR UNE ANNONCE
+    //MODIFIER UNE ANNONCE
     /**
-     * @Route('/annonce/update/{annonce}')
+     * @Route("/annonce/update/{annonce}", name="updateann")
      */
-    public function update_ann(Annonce $annonce)
+    public function update_ann(Request $request, EntityManagerInterface $em ,  Annonce $annonce)
     {
-        $em = $this->getDoctrine()->getManager();
-        $annonces = $em->getRepository(Annonce::class)->findAll();
-        return ["annonces" => $annonces];
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $form = $this->createForm(AnnonceFormType::class, $annonce)
+            ->add('Update', SubmitType::class)
+            ->add("image", fileType::class,  array(
+                'label' => 'Image (JPEG file)',
+                'data_class' => null
+            ));
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em->persist($annonce);
+            $em->flush();
+
+            return $this->redirectToRoute("annonceup");
+        }
+
+        return $this->render('annonce/update_ann.html.twig',
+            ["form" => $form->createView()]);
 
     }
 
     //SUPPRIMER UNE ANNONCE
 
     /**
-     * @Route('/annonce/delete/{annonce}')
+     * @Route("/annonce/delete/{annonce}" , name="annoncedelete")
      */
     public function delete_ann(Annonce $annonce)
     {
 
         $em = $this->getDoctrine()->getManager();
-        $annonces = $em->getRepository(Annonce::class)->findAll();
-        return ["annonces" => $annonces];
+        $em->remove($annonce);
+        $em->flush();
+        return $this->redirectToRoute("annonceup");
     }
-
-
-
-
 
 
     private function generateUniqueFileName()

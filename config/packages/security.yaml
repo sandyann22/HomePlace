@@ -22,17 +22,17 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:             #nom du pare-feu(modifiable)
             anonymous: true #accepte les utilisateurs anonymes
-
-        pattern:    ^/   # masque d'url permettant de proteger avec le pare-feu toutes les url commencant par /
-        http_basic: ~    # use http basic for login
-
+            pattern:    ^/   # masque d'url permettant de proteger avec le pare-feu toutes les url commencant par /
+            http_basic: ~    # use http basic for login
             provider: in_database
+
             form_login:
-              login_path: security_login
-              check_path: security_login
-              default_target_path: home
+                login_path: security_login
+                check_path: security_login
+                default_target_path: home
 
             logout:
                 path: /logout

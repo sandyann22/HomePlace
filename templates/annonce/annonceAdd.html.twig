@@ -2,28 +2,29 @@
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
 {% block body %}
-    <h1> Proposez votre bien à l'ensemble des utilisateurs de HomePlace Collaboration!</h1>
-
-    {{ form_start(form) }}
-
-
-    {{ form_row(form.titre, {'label':'Titre', 'attr':{'placeholder': 'Titre'}}) }}
-
-    {{ form_row(form.description,{'label':'Description', 'attr':{'placeholder': 'Description'}}) }}
-
-    {{ form_row(form.createdAt,{'label':'Date de création de l\'annonce', 'attr':{'placeholder': 'Date de création de l\'annonce'}}) }}
-
-    {{ form_row(form.image,{'label':'Image', 'attr':{'placeholder': 'Vos images, C\'est plus évocateur'}}) }}
-
-
-    {{ form_row(form.region, {'label':'Votre région', 'attr':{'placeholder': 'Votre région'}}) }}
-
-    {{ form_row(form.categorie, {'label':'Maison ou appartement', 'attr':{'placeholder': 'Maison ou appartement'}}) }}
-
-    {{ form_row(form.autre, {'label':'Informations complémentaires', 'attr':{'placeholder': 'Informations complémentaires'}}) }}
 
 
 
-    {{ form_end(form) }}
+            <h1> Proposez votre bien à l'ensemble des utilisateurs de HomePlace Collaboration!</h1>
+            {{ form_start(form) }}
+
+            {{ form_row(form.titre, {'label':'Titre', 'attr':{'placeholder': 'Titre'}}) }}
+
+            {{ form_row(form.description,{'label':'Description', 'attr':{'placeholder': 'Description'}}) }}
+
+            {{ form_row(form.createdAt,{'label':'Date de création de l\'annonce', 'attr':{'placeholder': 'Date de création de l\'annonce'}}) }}
+
+            {{ form_row(form.image,{'label':'Image', 'attr':{'placeholder': 'Vos images, C\'est plus évocateur'}}) }}
+
+            {{ form_row(form.region, {'label':'Votre région', 'attr':{'placeholder': 'Votre région'}}) }}
+
+            {{ form_row(form.categorie, {'label':'Maison ou appartement', 'attr':{'placeholder': 'Maison ou appartement'}}) }}
+
+            {{ form_row(form.autre, {'label':'Informations complémentaires', 'attr':{'placeholder': 'Informations complémentaires'}}) }}
+
+
+
+            {{ form_end(form) }}
+
 
 {% endblock %}
