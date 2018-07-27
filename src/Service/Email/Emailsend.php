@@ -10,32 +10,41 @@ namespace App\Service\Email;
 
 
 use App\Entity\User;
+/**
+ * @var \Swift_Mailer
+ */
+
+
+/**
+ * @var \Twig_Environment templating
+ */
 
 class Emailsend
 {
-    /**
-     * @var \Swift_Mailer
-     */
+
+    private $templating;
     private $mailer;
-
-    /**
-     * @var \Twig_Environment
-     */
-    private $twig_Environment;
-
-    public function index(User $user, \Swift_Mailer $mailer)
+    public function __construct(\Swift_Mailer $mailer, \Twig_Environment $templating)
     {
-        $message = (new \Swift_Message ('Hello Email'))
-            ->setFrom('sandycerdangras@orange.fr')
-            ->setTo(($user->getEmail())
+        $this->mailer     = $mailer;
+        $this->templating = $templating;
+    }
+    public function sendWelcomeMail(User $user)
+    {
+
+            $message = (new \Swift_Message('Welcome Email'))
+                ->setFrom('sandycerdan51@gmail.com')
+                ->setTo($user->getEmail())
                 ->setBody(
-                    $this->renderView('home/emailbienvenue.html.twig',
-                        array('username' => $user->getUsername())
-                    ), 'text/html'
-                ) );
+                    $this->templating->render(
+                    // templates/emails/registration.html.twig
+                        'home/emailbienvenue.html.twig',
+                        array('user' => $user)
+                    ),
+                    'text/html'
+                );
 
         $this->mailer->send($message);
-        return $this->render('accueil.html.twig');
     }
 
 }

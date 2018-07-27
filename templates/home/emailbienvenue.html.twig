@@ -1,13 +1,12 @@
-{% extends'base.html.twig' %}
-{% block body %}
+
+
     <h2>Bienvenue</h2>
 
 
 
-    <p> {{ username }} ! vous êtes bien enregister sur notre site collaboratif
+    <p> {{ user.username }} ! vous êtes bien enregister sur notre site collaboratif
     </p>
 
-    <img src="{{ absolute_url(asset('images/logomaison.png')) }}">
 
 
-{% endblock %}
+

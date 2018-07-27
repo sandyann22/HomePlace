@@ -23,7 +23,6 @@ class UserFormType extends AbstractType
             ->add('email', EmailType::class)
             ->add('password', PasswordType::class)//permet de cacher le password à l'affichage
             ->add('confirm_password', PasswordType::class)
-            ->add('roles', CollectionType::class)
         ;
     }
 
